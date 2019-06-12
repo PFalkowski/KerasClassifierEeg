@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28902.138
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "KerasClassifierEeg", "KerasClassifierEeg\KerasClassifierEeg.pyproj", "{FA3ABF6A-1D0C-4116-99CE-98ECD6AF4E33}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FA3ABF6A-1D0C-4116-99CE-98ECD6AF4E33}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA3ABF6A-1D0C-4116-99CE-98ECD6AF4E33}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BFEE13A8-631C-451F-AD01-9A6AB70B898D}
+	EndGlobalSection
+EndGlobal
