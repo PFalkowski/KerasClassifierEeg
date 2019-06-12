@@ -48,12 +48,12 @@ class EegBandsClassificationApi:
             raise ValueError('dataframe is not initialized. Use ReadData() before calling CreateModel()')
         model = Sequential()
         model.add(Dense(self.inputLen(), input_dim = self.inputLen(), kernel_initializer='normal', activation='relu'))
-        model.add(Dense(30, kernel_initializer='normal', activation='relu'))
+        model.add(Dense(50, kernel_initializer='normal', activation='relu'))
         model.add(Dense(1, kernel_initializer='normal', activation='sigmoid'))	    
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model
 
-    def TrainModel(self, iterations=100, batchSize=5):
+    def TrainModel(self, iterations=2000, batchSize=5):
         if (self.dataframe is None):
             raise ValueError('dataframe is not initialized. Use ReadData() before calling TrainModel()')
         estimators = []
