@@ -12,7 +12,6 @@ from sklearn.pipeline import Pipeline
 
 class EegBandsClassificationApi:
     
-    binaryConditionMap = {"Conscious" : 1, "Unconscious" : 0}
 
     def __init__(self):
         return
@@ -30,8 +29,8 @@ class EegBandsClassificationApi:
     def __DropUnnededColumns(self):
         self.dataframe = self.dataframe.drop(["Condition", "TernaryCondition", "Subject", "Session"], axis=1)
 
-    def __EncodeCatData(self):
-        self.dataframe['BinaryCondition'] = self.dataframe['BinaryCondition'].map(self.binaryConditionMap)
+    def __EncodeCatData(self, binaryConditionMap = {"Conscious" : 1, "Unconscious" : 0}):    
+        self.dataframe['BinaryCondition'] = self.dataframe['BinaryCondition'].map(binaryConditionMap)
 
     def __AssignToX_Y(self):
         self.X = self.dataframe.drop(['BinaryCondition'], axis=1).values
@@ -53,7 +52,7 @@ class EegBandsClassificationApi:
         model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
         return model
 
-    def TrainModel(self, iterations=100, batchSize=5):
+    def TrainModel(self, iterations=5000, batchSize=5):
         if (self.dataframe is None):
             raise ValueError('dataframe is not initialized. Use ReadData() before calling TrainModel()')
         estimators = []
