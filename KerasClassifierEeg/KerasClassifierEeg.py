@@ -1,5 +1,6 @@
 import numpy
 import pandas
+import datetime
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.wrappers.scikit_learn import KerasClassifier
@@ -12,6 +13,7 @@ from sklearn.pipeline import Pipeline
 
 class EegBandsClassificationApi:
     
+    debug = False
 
     def __init__(self):
         return
@@ -31,16 +33,23 @@ class EegBandsClassificationApi:
 
     def __EncodeCatData(self, binaryConditionMap = {"Conscious" : 1, "Unconscious" : 0}):    
         self.dataframe['BinaryCondition'] = self.dataframe['BinaryCondition'].map(binaryConditionMap)
-
+        
     def __AssignToX_Y(self):
         self.X = self.dataframe.drop(['BinaryCondition'], axis=1).values
         self.Y = self.dataframe["BinaryCondition"].values
+
+    def __DumpXandY(self):
+        now = datetime.datetime.now()
+        numpy.savetxt(f"X_{now.day}-{now.month}-{now.hour}-{now.minute}.csv", numpy.asarray(self.X), delimiter=",")
+        numpy.savetxt(f"Y_{now.day}-{now.month}-{now.hour}-{now.minute}.csv", numpy.asarray(self.Y), delimiter=",")
 
     def MoldData(self):
         self.__CleanNulls()
         self.__DropUnnededColumns()
         self.__EncodeCatData()
         self.__AssignToX_Y()
+        if self.debug:
+            self.__DumpXandY()
 
     def CreateModel(self):
         if (self.dataframe is None):
@@ -57,7 +66,7 @@ class EegBandsClassificationApi:
             raise ValueError('dataframe is not initialized. Use ReadData() before calling TrainModel()')
         estimators = []
         estimators.append(('scale', MinMaxScaler()))
-        estimators.append(('mlp', KerasClassifier(build_fn=self.CreateModel, epochs=iterations, batch_size=batchSize, verbose=0)))
+        estimators.append(('mlp', KerasClassifier(build_fn=self.CreateModel, epochs=iterations, batch_size=batchSize, verbose=self.debug)))
         pipeline = Pipeline(estimators)
         kfold = StratifiedKFold(n_splits=10, shuffle=True)
         self.results = cross_val_score(pipeline, self.X, self.Y, cv=kfold)
@@ -71,6 +80,7 @@ class EegBandsClassificationApi:
 if __name__ == '__main__':
     # load dataset
     api = EegBandsClassificationApi()
+    api.debug = True
     api.ReadData("..\AvgBandpowers_9-6-13-2_100-15_awake+anesthetized.csv")
     api.MoldData()
     api.TrainModel()
